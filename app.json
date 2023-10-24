@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "TpIntegrador",
+    "slug": "TpIntegrador",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "TpIntegrador"
+}
