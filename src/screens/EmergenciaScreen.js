@@ -1,24 +1,37 @@
-import React from 'react'
-import { View, StyleSheet, Alert } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Alert, Button, Text } from "react-native";
+import Menu from "../components/Menu";
 import Storage from "../services/Storage";
+import { Accelerometer } from 'expo-sensors';
 
-export default function EmergenciaScreen({navigation}) {
+export default function EmergenciaScreen({ navigation }) {
+  const [numero, setNumero] = useState("");
 
-  let storageService = new Storage()
+  const [{ x, y, z }, setData] = useState({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
 
+  let storageService = new Storage();
+
+  useEffect(() => {
+    async function getNumber() {
+      let data = await storageService.obtenerCredenciales();
+      setNumero(JSON.stringify(data.numeroEmergencia));
+    }
+    getNumber();
+  }, []);
+
+  console.log("numero:", numero);
 
   return (
     <View style={styles.container}>
+      <Text style={styles.titulo}>LLAMADO DE EMERGENCIA</Text>
 
-      {console.log(storageService.obtenerCredenciales())}
-
-
-      </View>
-    
-    
-    
-    
-  )
+      <Menu navigation={navigation}></Menu>
+    </View>
+  );
 }
 const styles = StyleSheet.create({
   logo: {
@@ -63,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   titulo: {
-    paddingTop: 25,
-    fontSize: 20,
+    fontSize: 22,
+    fontWeight: "bold",
   },
 });
