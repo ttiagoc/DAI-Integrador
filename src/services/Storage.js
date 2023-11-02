@@ -7,30 +7,7 @@ const URLAUDIO_KEY='KEY_URLAUDIO';
 
 export default class Storage{ 
 
-    automaticlogin = async() => { 
-        //Obtiene las credenciales almacenadas e intenta loguearse.  
-        try {
-
-            let numero = null, url1 = null, url2 = null;
-
-             numero = await AsyncStorage.getItem(NUMEROEMERGENCIA_KEY);
-             url1 = await AsyncStorage.getItem(URLVIDEO_KEY);
-             url2 = await  AsyncStorage.getItem(URLAUDIO_KEY);
-            let isValid;
-            
-            if(numero != null && url1 != null && url2 != null){
-                isValid = true;
-            }else{
-                isValid = false;
-            } 
-
-            return isValid; 
-
-        } catch(e){
-            return false;
-        }
-    };
-
+ 
     //Elimina las credenciales almacenadas al cerrar sesión 
     eliminarCredenciales = async() => { 
         try{

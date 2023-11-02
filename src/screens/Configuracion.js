@@ -1,14 +1,35 @@
-import React from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  StatusBar,
-  TextInput,
-} from "react-native";
+import React, {useState, useRef} from "react";
+import { Text, View, StyleSheet, Image, StatusBar, TextInput, Alert, KeyboardAvoidingView } from "react-native";
 import configuracion from "../images/configuracion.png";
-export default function Configuracion() {
+import Storage from "../services/Storage";
+import BotonReutilizable from '../components/BotonReutilizable'
+
+export default function Configuracion({navigation}) {
+
+  const [numEmergencia, setNumEmergencia] = useState("")
+  const [urlVideo, setUrlVideo] = useState("")
+  const [urlAudio, setUrlAudio] = useState("")
+
+  const videoRef = useRef();
+  const audioRef = useRef();
+
+  let storageService = new Storage()
+
+
+
+  const HandleConfig = async() => {
+
+    if (numEmergencia.toLowerCase() !== '' && urlVideo.toLowerCase() !== ''  && urlAudio.toLowerCase() !== ''){
+     
+      await storageService.almacenarCredenciales(numEmergencia, urlVideo, urlAudio);
+      navigation.navigate('EmergenciaScreen');
+      }else{
+        Alert.alert("ATENCION", "COMPLETA TODOS LOS CAMPOS" )
+      }      
+    }
+  
+
+
   return (
     <>
       <View style={styles.container}>
@@ -27,9 +48,12 @@ export default function Configuracion() {
             editable
             maxLength={20}
             style={styles.input}
+            onChangeText={input => setNumEmergencia(input)}
             placeholder="ingresar..."
             returnKeyType="next"
             blurOnSubmit={false}
+            onSubmitEditing= {() => {videoRef.current.focus();}}
+            value={numEmergencia}
           />
 
           <Text style={{ maxWidth: 250, paddingTop: 20 }}>
@@ -39,9 +63,13 @@ export default function Configuracion() {
             editable
             maxLength={20}
             style={styles.input}
+            onChangeText={input => setUrlVideo(input)}
             placeholder="ingresar..."
             returnKeyType="next"
             blurOnSubmit={false}
+            value={urlVideo}
+            ref={videoRef}
+            onSubmitEditing= {() => {audioRef.current.focus();}}
           />
 
         <Text style={{ maxWidth: 250, paddingTop: 20 }}>
@@ -51,10 +79,15 @@ export default function Configuracion() {
             editable
             maxLength={20}
             style={styles.input}
+            onChangeText={input => setUrlAudio(input)}
             placeholder="ingresar..."
-            returnKeyType="next"
             blurOnSubmit={false}
+            ref={audioRef}
+            value={urlAudio}
           />
+
+           <BotonReutilizable onPress={HandleConfig} texto='INGRESAR' style={styles.button} />
+        
         </View>
       </View>
     </>
