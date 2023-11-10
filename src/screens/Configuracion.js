@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, StatusBar, TextInput, Alert, KeyboardAvo
 import configuracion from "../images/configuracion.png";
 import Storage from "../services/Storage";
 import BotonReutilizable from '../components/BotonReutilizable'
+import Menu from "../components/Menu";
 
 export default function Configuracion({navigation}) {
 
@@ -87,7 +88,6 @@ export default function Configuracion({navigation}) {
           />
 
            <BotonReutilizable onPress={HandleConfig} texto='INGRESAR' style={styles.button} />
-        
         </View>
       </View>
     </>
