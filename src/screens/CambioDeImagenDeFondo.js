@@ -2,10 +2,10 @@ import { View, Text, StyleSheet, SafeAreaView, Button, Image, ImageBackground, T
 import React, { useState, useEffect } from 'react';
 import Menu from '../components/Menu'
 import * as ImagePicker from 'expo-image-picker';
-import DataService from '../services/DataService';
 import { Camera, CameraType } from 'expo-camera';
+import Storage from '../services/Storage';
 
-let dataService = new DataService()
+let data = new Storage()
 
 export default function CambioDeImagenDeFondo({ navigation }) {
 
@@ -23,8 +23,8 @@ export default function CambioDeImagenDeFondo({ navigation }) {
     });
 
     if (!result.canceled) {
-      await dataService.guardarBackground(JSON.stringify(result.assets[0]));
-      let backgroundImage = JSON.parse(await dataService.obtenerBackground());
+      await data.guardarBackground(JSON.stringify(result.assets[0]));
+      let backgroundImage = JSON.parse(await data.obtenerBackground());
       setImage(backgroundImage.uri);
     }
   };
@@ -42,15 +42,15 @@ export default function CambioDeImagenDeFondo({ navigation }) {
   const __takePicture = async () => {
     if (!camera) return
     const photo = await camera.takePictureAsync();
-    await dataService.guardarBackground(JSON.stringify(photo));
-    let backgroundImage = JSON.parse(await dataService.obtenerBackground());
+    await data.guardarBackground(JSON.stringify(photo));
+    let backgroundImage = JSON.parse(await data.obtenerBackground());
     setImage(backgroundImage.uri);
     setStartCamera(false)
   }
 
   let loadBackground = async () => {
-    if (JSON.parse(await dataService.obtenerBackground())) {
-      let backgroundImage = JSON.parse(await dataService.obtenerBackground());
+    if (JSON.parse(await data.obtenerBackground())) {
+      let backgroundImage = JSON.parse(await data.obtenerBackground());
       setImage(backgroundImage.uri);
     }
   }

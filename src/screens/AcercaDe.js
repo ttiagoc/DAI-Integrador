@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, SafeAreaView, ImageBackground, Image, TouchableOpacity, Button } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import Menu from '../components/Menu'
-import DataService from '../services/DataService'
+import Storage from '../services/Storage';
 import * as Font from 'expo-font';
 import * as Clipboard from 'expo-clipboard';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-let dataService = new DataService();
+let data = new Storage();
 const NOMBRE_APP = 'Tiago y Nacho'
 
 export default function AcercaDe({ navigation }) {
@@ -25,8 +25,8 @@ export default function AcercaDe({ navigation }) {
     }
 
     let loadBackground = async () => {
-        if (JSON.parse(await dataService.obtenerBackground())) {
-            let backgroundImage = JSON.parse(await dataService.obtenerBackground());
+        if (JSON.parse(await data.obtenerBackground())) {
+            let backgroundImage = JSON.parse(await data.obtenerBackground());
             setImage(backgroundImage.uri);
         }
     }

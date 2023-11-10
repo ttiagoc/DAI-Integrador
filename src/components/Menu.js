@@ -13,13 +13,13 @@ export default function Menu({ navigation }) {
 
       <View style={styles.container2}>
         <Pressable style={styles.button} onPress={() => navigation.navigate("Configuracion")}>
-          <Text style={{ color: "white", fontSize: 20 }}>Config</Text>
+          <Text style={{ color: "white", fontSize: 13 }}>Config</Text>
         </Pressable>
       </View>
 
       <View style={styles.container2}>
         <Pressable style={styles.button} onPress={() => navigation.navigate("EmergenciaScreen")} >
-          <Text style={{ color: "white", fontSize: 20 }}>Emergencia</Text>
+          <Text style={{ color: "white", fontSize: 13 }}>Emergencia</Text>
         </Pressable>
 
 
@@ -28,13 +28,19 @@ export default function Menu({ navigation }) {
 
       <View style={styles.container2}>
         <Pressable style={styles.button} onPress={() => navigation.navigate("CambioDeImagenDeFondo")}>
-          <Text style={{ color: "white", fontSize: 20 }}>Cambio Fondo</Text>
+          <Text style={{ color: "white", fontSize: 13 }}>Cambio Fondo</Text>
         </Pressable>
       </View>
 
       <View style={styles.container2}>
         <Pressable style={styles.button} onPress={() => navigation.navigate("AcercaDe")}>
-          <Text style={{ color: "white", fontSize: 20 }}>Acerca De</Text>
+          <Text style={{ color: "white", fontSize: 13 }}>Acerca De</Text>
+        </Pressable>
+      </View>
+
+      <View style={styles.container2}>
+        <Pressable style={styles.button} onPress={() => navigation.navigate("MultimediaScreen")}>
+          <Text style={{ color: "white", fontSize: 13 }}>Multimedia</Text>
         </Pressable>
       </View>
 

@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const NUMEROEMERGENCIA_KEY='KEY_NUMEROEMERGENCIA';
 const URLVIDEO_KEY='KEY_URLVIDEO';
 const URLAUDIO_KEY='KEY_URLAUDIO';
-
+const BACKGROUND_KEY='background';
 
 export default class Storage{ 
 
@@ -41,6 +41,21 @@ export default class Storage{
         return returnValue; 
     }; 
 
+    guardarBackground = async(background) => { 
+        //Almacena las credenciales en el asyncStorage
+        try {    
+            await AsyncStorage.setItem(BACKGROUND_KEY, background);  
+            return true;
+        } catch(e) {    
+            console.log(e);
+            return false;
+        }
+    }; 
 
+    obtenerBackground = async() => { 
+        let storedBackground = await AsyncStorage.getItem(BACKGROUND_KEY);
+        const returnValue = storedBackground; 
+        return returnValue; 
+    }; 
 
 }

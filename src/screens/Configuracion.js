@@ -63,7 +63,7 @@ export default function Configuracion({navigation}) {
           </Text>
           <TextInput
             editable
-            maxLength={20}
+          
             style={styles.input}
             onChangeText={input => setUrlVideo(input)}
             placeholder="ingresar..."
@@ -79,7 +79,7 @@ export default function Configuracion({navigation}) {
           </Text>
           <TextInput
             editable
-            maxLength={20}
+         
             style={styles.input}
             onChangeText={input => setUrlAudio(input)}
             placeholder="ingresar..."
