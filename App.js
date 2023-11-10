@@ -5,6 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Configuracion from "./src/screens/Configuracion";
 import EmergenciaScreen from "./src/screens/EmergenciaScreen";
 import CambioDeImagenDeFondo from "./src/screens/CambioDeImagenDeFondo";
+import AcercaDe from "./src/screens/AcercaDe"
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -18,6 +19,7 @@ export default function App() {
         <Stack.Screen name="Configuracion" component={Configuracion} />
         <Stack.Screen name="EmergenciaScreen" component={EmergenciaScreen} />
         <Stack.Screen name="CambioDeImagenDeFondo" component={CambioDeImagenDeFondo} />
+        <Stack.Screen name="AcercaDe" component={AcercaDe} />
       </Stack.Navigator>
     </NavigationContainer>
   );

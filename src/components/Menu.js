@@ -32,6 +32,12 @@ export default function Menu({ navigation }) {
         </Pressable>
       </View>
 
+      <View style={styles.container2}>
+        <Pressable style={styles.button} onPress={() => navigation.navigate("AcercaDe")}>
+          <Text style={{ color: "white", fontSize: 20 }}>Acerca De</Text>
+        </Pressable>
+      </View>
+
     </View>
   );
 }
@@ -46,7 +52,7 @@ const styles = StyleSheet.create({
     height: 65
   },
   container2: {
-    width: "25%",
+    width: "20%",
     borderWidth: 1,
 
   },
