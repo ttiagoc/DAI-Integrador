@@ -23,7 +23,8 @@ export default function Configuracion({navigation}) {
     if (numEmergencia.toLowerCase() !== '' && urlVideo.toLowerCase() !== ''  && urlAudio.toLowerCase() !== ''){
      
       await storageService.almacenarCredenciales(numEmergencia, urlVideo, urlAudio);
-      navigation.navigate('EmergenciaScreen');
+      Alert.alert("atención", "datos cargados con éxito")
+      navigation.navigate('EmergenciaScreen')
       }else{
         Alert.alert("ATENCION", "COMPLETA TODOS LOS CAMPOS" )
       }      
@@ -87,7 +88,8 @@ export default function Configuracion({navigation}) {
             value={urlAudio}
           />
 
-           <BotonReutilizable onPress={HandleConfig} texto='INGRESAR' style={styles.button} />
+           <BotonReutilizable onPress={HandleConfig} texto='INGRESAR DATOS' style={styles.button} />
+          
         </View>
       </View>
     </>

@@ -17,18 +17,21 @@ export default function Menu({ navigation }) {
         </Pressable>
       </View>
 
-
       <View style={styles.container2}>
         <Pressable style={styles.button} onPress={() => navigation.navigate("EmergenciaScreen")} >
           <Text style={{ color: "white", fontSize: 20 }}>Emergencia</Text>
         </Pressable>
+
+
       </View>
 
+
       <View style={styles.container2}>
-        <Pressable style={styles.button} onPress={() => navigation.navigate("CambioDeImagenDeFondo")} >
-          <Text style={{ color: "white", fontSize: 20 }}>Img Fondo</Text>
+        <Pressable style={styles.button} onPress={() => navigation.navigate("CambioDeImagenDeFondo")}>
+          <Text style={{ color: "white", fontSize: 20 }}>Cambio Fondo</Text>
         </Pressable>
       </View>
+
     </View>
   );
 }
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
     height: 65
   },
   container2: {
-    width: "33%",
+    width: "25%",
     borderWidth: 1,
 
   },
