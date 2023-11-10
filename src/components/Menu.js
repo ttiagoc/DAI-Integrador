@@ -11,9 +11,15 @@ export default function Menu({ navigation }) {
   return (
     <View style={styles.container}>
 
+<View style={styles.container2}>
+        <Pressable style={styles.button} onPress={() => navigation.navigate("Configuracion")}>
+          <Text style={{ color: "white", fontSize:20 }}>1</Text>
+        </Pressable>
+      </View>
+
       <View style={styles.container2}>
        <Pressable style={styles.button} onPress={() => navigation.navigate("EmergenciaScreen")} >
-          <Text style={{ color: "white", fontSize:20 }}>1</Text>
+          <Text style={{ color: "white", fontSize:20 }}>2</Text>
       </Pressable>
 
         
@@ -21,13 +27,13 @@ export default function Menu({ navigation }) {
 
       <View style={styles.container2}>
         <Pressable style={styles.button} onPress={() => navigation.navigate("GreenScreen")}>
-          <Text style={{ color: "white", fontSize:20 }}>2</Text>
+          <Text style={{ color: "white", fontSize:20 }}>3</Text>
         </Pressable>
       </View>
 
       <View style={styles.container2}>
         <Pressable style={styles.button} onPress={() => navigation.navigate("RedScreen")}>
-          <Text style={{ color: "white", fontSize:20 }}>3</Text>
+          <Text style={{ color: "white", fontSize:20 }}>4</Text>
         </Pressable>
       </View>
     </View>
@@ -44,7 +50,7 @@ const styles = StyleSheet.create({
     height:65
   },
   container2: {
-    width: "33%",
+    width: "25%",
     borderWidth:1,
 
   },

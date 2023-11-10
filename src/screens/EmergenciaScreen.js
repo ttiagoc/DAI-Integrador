@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Alert, Button, Text } from "react-native";
+import { View, StyleSheet, Alert, Button, Text, Linking } from "react-native";
 import Menu from "../components/Menu";
 import Storage from "../services/Storage";
+import Acelerometro from '../components/Acelerometro'
 import { Accelerometer } from 'expo-sensors';
 
 export default function EmergenciaScreen({ navigation }) {
+
   const [numero, setNumero] = useState("");
 
   const [{ x, y, z }, setData] = useState({
@@ -13,21 +15,45 @@ export default function EmergenciaScreen({ navigation }) {
     z: 0,
   });
 
+
   let storageService = new Storage();
+
+  const LlamarNumero = () => {
+    if (numero != null) {
+    Linking.openURL(`tel:${numero}`) 
+    }else{
+      Alert.alert("ATENCIÓN", "DEBES INGRESAR UN NÚMERO DE TELEFONO EN LA PRIMER PANTALLA PARA UTILIZAR ESTA FUNCIÓN")
+    }
+
+  }
+
 
   useEffect(() => {
     async function getNumber() {
       let data = await storageService.obtenerCredenciales();
       setNumero(JSON.stringify(data.numeroEmergencia));
     }
+    Accelerometer.addListener(setData);
     getNumber();
   }, []);
 
-  console.log("numero:", numero);
+  if (x > 1 || y > 1 || x < -1 || y < -1) {
+   
+  while (x > 1) {
+    LlamarNumero()
+    setData({x:0, y:0, z:0})
+  }
+
+
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>LLAMADO DE EMERGENCIA</Text>
+
+      <Text style={styles.text}>x: {x}</Text>
+      <Text style={styles.text}>y: {y}</Text>
+      <Text style={styles.text}>z: {z}</Text>
 
       <Menu navigation={navigation}></Menu>
     </View>
