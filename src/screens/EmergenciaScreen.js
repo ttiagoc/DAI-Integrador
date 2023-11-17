@@ -1,108 +1,137 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Alert, Button, Text, Linking } from "react-native";
-import Menu from "../components/Menu";
+import { View, Text, SafeAreaView, StyleSheet, Linking, Alert, Platform, ImageBackground } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import Menu from '../components/Menu'
+import {
+  Accelerometer,
+} from 'expo-sensors';
+import { Vibration } from 'react-native';
 import Storage from "../services/Storage";
-import Acelerometro from '../components/Acelerometro'
-import { Accelerometer } from 'expo-sensors';
+import ModalMensaje from '../components/ModalMensaje'
+import MessageConstants from '../constants/MessageConstants'
+
+let dataService = new Storage();
 
 export default function EmergenciaScreen({ navigation }) {
-
-  const [numero, setNumero] = useState("");
 
   const [{ x, y, z }, setData] = useState({
     x: 0,
     y: 0,
     z: 0,
   });
+  const [subscription, setSubscription] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [mensajeModal, setMensajeModal] = useState('');
+  const [image, setImage] = useState(null);
+  const [telefono, setTelefono] = useState();
 
+  const _slow = () => Accelerometer.setUpdateInterval(1000);
+  const _fast = () => Accelerometer.setUpdateInterval(16);
 
-  let storageService = new Storage();
-
-  const LlamarNumero = () => {
-    if (numero != null) {
-    Linking.openURL(`tel:${numero}`) 
-    }else{
-      Alert.alert("ATENCIÓN", "DEBES INGRESAR UN NÚMERO DE TELEFONO EN LA PRIMER PANTALLA PARA UTILIZAR ESTA FUNCIÓN")
+  const callNumber = (phone) => {
+    console.log('callNumber ----> ', phone);
+    let phoneNumber = phone;
+    if (Platform.OS !== 'android') {
+      phoneNumber = `telprompt:${phone}`;
     }
+    else {
+      phoneNumber = `tel:${phone}`;
+    }
+    Linking.canOpenURL(phoneNumber)
+      .then(supported => {
+        if (!supported) {
+          Alert.alert('Phone number is not available');
+        } else {
+          return Linking.openURL(phoneNumber);
+        }
+      })
+      .catch(err => console.log(err));
+  };
 
+  const checkNumber = async () => {
+    if ((await dataService.obtenerCredenciales()).numeroEmergencia) {
+      datos = await dataService.obtenerCredenciales();
+      callNumber(datos.numeroEmergencia);
+    } else {
+      setMensajeModal(MessageConstants.MSG_TELEFONO_UNDEFINED);
+      setModalVisible(true);
+    }
+    Vibration.vibrate();
+  };
+
+  const _subscribe = () => {
+    let auxiliarX;
+    setSubscription(Accelerometer.addListener(async (accelerometerData) => {
+      auxiliarX = x;
+      if (accelerometerData.x < auxiliarX) {
+        if ((auxiliarX - accelerometerData.x) > 0.5) {
+          checkNumber();
+        }
+      } else {
+        if ((accelerometerData.x - auxiliarX) > 0.5) {
+          if ((auxiliarX - accelerometerData.x) > 0.5) {
+            checkNumber();
+          }
+        }
+      }
+      setData(accelerometerData);
+    }));
+  };
+
+  const _unsubscribe = () => {
+    subscription && subscription.remove();
+    setSubscription(null);
+  };
+
+  let loadBackground = async () => {
+    if (JSON.parse(await dataService.obtenerBackground())) {
+      let backgroundImage = JSON.parse(await dataService.obtenerBackground());
+      setImage(backgroundImage.uri);
+    }
   }
 
+  let loadTelefono = async () => {
+    let datos = await dataService.obtenerCredenciales();
+    if(datos.numeroEmergencia){
+      setTelefono(datos.numeroEmergencia)
+    }    
+  }
 
   useEffect(() => {
-    async function getNumber() {
-      let data = await storageService.obtenerCredenciales();
-      setNumero(JSON.stringify(data.numeroEmergencia));
-    }
-    Accelerometer.addListener(setData);
-    getNumber();
+    loadBackground();
+    loadTelefono();
+    _subscribe();
+    _slow();
+    return () => _unsubscribe();
   }, []);
 
-  if (x > 1 || y > 1 || x < -1 || y < -1) {
-   
-  while (x > 1) {
-    LlamarNumero()
-    setData({x:0, y:0, z:0})
-  }
-
-
-  }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>LLAMADO DE EMERGENCIA</Text>
-
-      <Text style={styles.text}>x: {x}</Text>
-      <Text style={styles.text}>y: {y}</Text>
-      <Text style={styles.text}>z: {z}</Text>
-
-      <Menu navigation={navigation}></Menu>
-    </View>
-  );
+    <SafeAreaView style={[styles.container]}>
+      <ImageBackground source={{ uri: image }} style={styles.image}>
+        <Text style={{ backgroundColor: 'white', fontSize: 20, width: '80%', textAlign: 'center' }}>Numero: {telefono}</Text>
+        <Text style={{ backgroundColor: 'white', fontSize: 20, width: '80%', textAlign: 'center' }}>Agita el celular para llamar a tu contacto de emergencia</Text>
+        <ModalMensaje mensaje={mensajeModal} modalVisible={modalVisible} setModalVisible={setModalVisible} success={success} />
+      </ImageBackground>
+      <Menu navigation={navigation} />
+    </SafeAreaView>
+  )
 }
+
 const styles = StyleSheet.create({
-  logo: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
-  },
   container: {
-    paddingTop: 50,
-    height: "100%",
-    backgroundColor: "#fff",
-    alignItems: "center",
-    backgroundColor: "#F3E5AB",
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#fff',
+    textAlign: 'center'
   },
-  button: {
-    marginTop: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "brown",
-    height: 50,
-    width: 200,
-    borderRadius: 5,
-    borderWidth: 3,
-    borderColor: "black",
-    fontWeight: "bold",
-  },
-  input: {
-    borderColor: "black",
-    borderWidth: 2,
-    width: 250,
-    height: "auto",
-    padding: 10,
-    marginTop: 10,
-    backgroundColor: "white",
-    borderRadius: 10,
-    backgroundColor: "#FFFEDC",
-  },
-  textLabel: {
-    alignSelf: "center",
-    paddingTop: 10,
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  titulo: {
-    fontSize: 22,
-    fontWeight: "bold",
+  image: {
+    width: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
